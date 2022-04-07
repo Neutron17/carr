@@ -11,8 +11,8 @@ typedef enum ArrErrors {
 	UNDEFINED_ERROR
 } ArrErrors;
 
-ArrErrors allocArr/*_ctor*/(Arr arr, unsigned sz);
-ArrErrors allocArr_dtor(Arr arr);
+ArrErrors allocArr/*_ctor*/(Arr *arr, unsigned sz);
+ArrErrors allocArr_dtor(Arr *arr);
 ArrErrors allocArr_add(Arr arr, void *n);
 ArrErrors allocArr_adds(Arr arr, void *n, ...);
 ArrErrors dallocArr_rem(Arr arr, void *n);
