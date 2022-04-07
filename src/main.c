@@ -15,6 +15,6 @@ int main(int argc, const char *argv[]) {
 	allocArr_add(arr, (void *)x);
 	allocArr_add(arr, (void *)y);
 	allocArr_add(arr, (void *)z);
-	allocArr_dtor(arr);
+	allocArr_dtor(&arr);
 	return EXIT_SUCCESS;
 }
