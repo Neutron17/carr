@@ -1,6 +1,7 @@
 #include "arr.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 unsigned used;
 unsigned max;
@@ -11,9 +12,10 @@ ArrErrors allocArr(Arr *arr, unsigned sz)  {
 	//arrr[0] = (void *)69;
 	max = sz;
 	arr->arr = (void **)malloc(sz);
-	printf("%p\n", arr->arr);
+	//printf("%p\n", arr->arr);
 	if(arr->arr == NULL) {
-		printf("Couldn't allocate\n");
+        if(isDebug)
+		    printf("Couldn't allocate\n");
 		return COULDNT_ALLOCATE;
 	}
 	used = 0;
@@ -21,23 +23,53 @@ ArrErrors allocArr(Arr *arr, unsigned sz)  {
 }
 ArrErrors allocArr_dtor(Arr *arr) {
 	for(int i = 0; i < used; i++) {
-		printf("Freeing %d. element\n", i);
+        if(isDebug)
+		    printf("Freeing %d. element\n", i+1);
 		free(arr->arr[i]);
 		arr->arr[i] = NULL;
 	}
 	free(arr->arr);
 	arr->arr = NULL;
-	printf("Successfuly freed all\n");
+    if(isDebug)
+	    printf("Successfuly freed all\n");
 	return SUCCESS;
 }
 ArrErrors allocArr_add(Arr arr, void *n) {
 	if(used == max)
 		return MAX_ITEMS_REACHED;
-	printf("%d\n", *((int*)n));
-	printf("%p\n", arr.arr);
+//	printf("%d\n", *((int*)n));
+//	printf("%p\n", arr.arr);
 
 	arr.arr[used] = n;
-	printf("Added %d. element\n", used+1);
+    if(isDebug)
+	    printf("Added %d. element %p\n", used+1, n);
 	used++;
 	return SUCCESS;
+}
+
+ArrErrors allocArr_adds(Arr arr, void *n, ...) {
+    va_list l;
+    va_start(l, n);
+    char last = SUCCESS;
+    for(int i = 0; i < (int)n; i++) {
+        if((last = allocArr_add(arr, va_arg(l, void *))) != SUCCESS)
+            return last;
+    }
+    va_end(l);
+    return SUCCESS;
+}
+
+bool allocArr_in(Arr arr, void *n) {
+    for(int i = 0; i < used; i++) {
+        if(arr.arr[i] == n)
+            return true;
+    }
+    return false;
+}
+bool allocArr_ins(Arr arr, void *n, ...) {
+    for(int i = 0; i < used; i++) {
+        if(arr.arr[i] == n)
+            return true;
+    }
+    return false;
 }
