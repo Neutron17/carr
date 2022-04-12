@@ -22,15 +22,20 @@ ArrErrors allocArr(Arr *arr, unsigned sz)  {
 	return SUCCESS;
 }
 ArrErrors allocArr_dtor(Arr *arr) {
+	if(isDebug)
+		printf("dtor\n");
 	for(int i = 0; i < used; i++) {
-        if(isDebug)
-		    printf("Freeing %d. element\n", i+1);
+		printf("%p\n", arr->arr[i]);
+        	if(isDebug) {
+			printf("Freeing %d. element\n", 
+					i+1);
+		}
 		free(arr->arr[i]);
 		arr->arr[i] = NULL;
 	}
 	free(arr->arr);
 	arr->arr = NULL;
-    if(isDebug)
+	if(isDebug)
 	    printf("Successfuly freed all\n");
 	return SUCCESS;
 }
@@ -41,7 +46,7 @@ ArrErrors allocArr_add(Arr arr, void *n) {
 //	printf("%p\n", arr.arr);
 
 	arr.arr[used] = n;
-    if(isDebug)
+	if(isDebug)
 	    printf("Added %d. element %p\n", used+1, n);
 	used++;
 	return SUCCESS;
@@ -58,7 +63,6 @@ ArrErrors allocArr_adds(Arr arr, void *n, ...) {
     va_end(l);
     return SUCCESS;
 }
-
 bool allocArr_in(Arr arr, void *n) {
     for(int i = 0; i < used; i++) {
         if(arr.arr[i] == n)
@@ -72,4 +76,8 @@ bool allocArr_ins(Arr arr, void *n, ...) {
             return true;
     }
     return false;
+}
+ArrErrors allocArr_pop(Arr *arr, const int n) {
+	free(arr->arr[used]);
+	arr->arr[used] = NULL;
 }

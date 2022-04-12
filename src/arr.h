@@ -1,12 +1,13 @@
 #ifndef _NTR_ALL_ARR_H_
 #define _NTR_ALL_ARR_H_ 1
 
-#include "allocator.h"
+//#include "allocator.h"
 #include <stdbool.h>
 
 typedef struct {
 	void **arr;
 } Arr;
+
 typedef enum ArrErrors {
 	SUCCESS = 0,
 	COULDNT_ALLOCATE,
